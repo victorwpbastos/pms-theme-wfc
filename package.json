@@ -1,0 +1,51 @@
+{
+	"name": "pms-theme",
+	"organization": "Prefeitura de Sorocaba - Seção de Sistemas",
+	"version": "1.0.0",
+	"private": true,
+	"scripts": {
+		"start": "webpack-dev-server --inline --progress --config build/webpack.config.dev.js",
+		"prebuild": "rimraf dist",
+		"postbuild": "copy config.js dist",
+		"build": "webpack --progress --display=\"none\" --hide-modules --config build/webpack.config.prod.js"
+	},
+	"authors": [
+		"Seção de Sistemas <desenvolvimento@sorocaba.sp.gov.br>",
+		"Seção de Sistemas <desenvolvimento@sorocaba.sp.gov.br>"
+	],
+	"devDependencies": {
+		"@babel/core": "^7.0.0-beta.34",
+		"@babel/plugin-syntax-dynamic-import": "^7.0.0-beta.34",
+		"@babel/preset-env": "^7.0.0-beta.34",
+		"babel-eslint": "^8.0.3",
+		"babel-loader": "^8.0.0-beta.0",
+		"copy": "^0.3.1",
+		"css-loader": "^0.28.7",
+		"eslint": "^4.12.1",
+		"eslint-loader": "^1.9.0",
+		"eslint-plugin-html": "^4.0.1",
+		"extract-text-webpack-plugin": "^3.0.2",
+		"file-loader": "^1.1.5",
+		"friendly-errors-webpack-plugin": "^1.6.1",
+		"html-webpack-plugin": "^2.30.1",
+		"less": "^2.7.3",
+		"less-loader": "^4.0.5",
+		"portfinder": "^1.0.13",
+		"rimraf": "^2.6.2",
+		"style-loader": "^0.19.0",
+		"vue-loader": "^13.5.0",
+		"vue-template-compiler": "^2.5.9",
+		"webpack": "^3.10.0",
+		"webpack-dev-server": "^2.9.5"
+	},
+	"dependencies": {
+		"@babel/polyfill": "^7.0.0-beta.34",
+		"bootstrap": "^3.3.7",
+		"font-awesome": "^4.7.0",
+		"jquery": "^3.2.1",
+		"vue": "^2.5.9",
+		"vue-router": "^3.0.1",
+		"vue-text-mask": "^5.2.0",
+		"vuelidate": "^0.6.1"
+	}
+}

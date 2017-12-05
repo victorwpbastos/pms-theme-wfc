@@ -1,0 +1,200 @@
+@import 'bootstrap';
+@import '../../node_modules/font-awesome/css/font-awesome.css';
+
+// layout
+html, body, #application-container {
+	height: 100%;
+	background: #e7e7e7;
+	overflow-y: hidden;
+}
+
+// general
+body {
+	font-family: BlinkMacSystemFont, -apple-system, 'Segoe UI', 'Roboto', 'Oxygen', 'Ubuntu', 'Cantarell', 'Fira Sans', 'Droid Sans', 'Helvetica Neue', 'Helvetica', 'Arial', sans-serif;
+	color: #777777;
+}
+
+h1, h2, h3, h4 {
+	margin: 0;
+}
+
+.form-control {
+	color: #777777;
+}
+
+.alert {
+	margin-bottom: 15px;
+
+	&:last-child {
+		margin-bottom: 0;
+	}
+}
+
+// utilities
+.flex {
+	display: flex;
+}
+
+.flex-column {
+	flex-direction: column;
+}
+
+.h-center {
+	justify-content: center;
+}
+
+.h-start {
+	justify-content: flex-start;
+}
+
+.h-end {
+	justify-content: flex-end;
+}
+
+.v-center {
+	align-items: center;
+}
+
+.v-start {
+	align-items: flex-start;
+}
+
+.v-end {
+	align-items: flex-end;
+}
+
+.m-left-5 {
+	margin-left: 5px;
+}
+
+.m-left-10 {
+	margin-left: 10px;
+}
+
+.m-left-auto {
+	margin-left: auto;
+}
+
+.m-right-5 {
+	margin-right: 5px;
+}
+
+.m-right-10 {
+	margin-right: 10px;
+}
+
+.m-right-auto {
+	margin-right: auto;
+}
+
+.thin {
+	font-weight: 100;
+}
+
+.overlay {
+	position: fixed;
+	top: 0;
+	bottom: 0;
+	left: 0;
+	right: 0;
+	background: rgba(0, 0, 0, 0.25);
+	z-index: 100;
+}
+
+.box {
+	padding: 15px;
+	box-shadow: 0px 1px 4px rgba(0, 0, 0, 0.25);
+	background: #ffffff;
+	border-radius: 3px;
+}
+
+// panels
+.panel {
+	margin-bottom: 15px;
+
+	&:last-child {
+		margin-bottom: 0;
+	}
+
+	&.panel-default {
+		.panel-heading {
+			color: #777777;
+		}
+	}
+}
+
+// panel custom
+.panel-custom {
+	box-shadow: 0 1px 4px rgba(0, 0, 0, 0.25);
+
+	> .panel-footer {
+		background: #ffffff;
+		border: none;
+	}
+}
+
+// tables
+table.table {
+	border: solid 1px #f1f1f1;
+	margin-bottom: 15px;
+	border-collapse: separate;
+	border-radius: 3px;
+
+	&:last-child {
+		margin-bottom: 0;
+	}
+
+	th, td {
+		padding: 15px !important;
+		vertical-align: middle !important;
+	}
+
+	thead, tfoot {
+		background: #f7f7f7;
+	}
+
+	thead {
+		th {
+			text-transform: uppercase;
+			font-weight: 600;
+			border: none !important;
+		}
+	}
+
+	tbody {
+		tr {
+			&:not(:only-child):hover {
+				background: #ffffde;
+			}
+		}
+	}
+
+	tbody, tfoot {
+		tr {
+			td {
+				border-top: solid 1px #f1f1f1 !important;
+			}
+		}
+	}
+
+	&.table-bordered {
+		border-collapse: collapse;
+
+		thead {
+			th {
+				border: 1px solid #dddddd !important;
+			}
+		}
+	}
+
+	&.table-condensed {
+		th, td {
+			padding: 5px !important;
+		}
+	}
+}
+
+// evita vários transtornos
+textarea {
+	resize: vertical;
+}
