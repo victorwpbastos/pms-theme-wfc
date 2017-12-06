@@ -1,5 +1,6 @@
 {
 	"name": "pms-theme",
+	"description": "pms-theme",
 	"organization": "Prefeitura de Sorocaba - Seção de Sistemas",
 	"version": "1.0.0",
 	"private": true,
@@ -10,7 +11,6 @@
 		"build": "webpack -p --progress --display=\"none\" --hide-modules --config build/webpack.config.prod.js"
 	},
 	"authors": [
-		"Seção de Sistemas <desenvolvimento@sorocaba.sp.gov.br>",
 		"Seção de Sistemas <desenvolvimento@sorocaba.sp.gov.br>"
 	],
 	"devDependencies": {

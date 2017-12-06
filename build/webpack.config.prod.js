@@ -154,7 +154,7 @@ module.exports = {
 			sourceMap: true
 		}),
 		new ExtractTextPlugin({
-			filename: 'css/application-[chunkhash].css',
+			filename: 'css/main-[chunkhash].css',
 			allChunks: true
 		}),
 		new webpack.BannerPlugin({
