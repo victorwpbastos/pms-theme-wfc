@@ -71,6 +71,37 @@ module.exports = portfinder.getPortPromise().then(port => {
 			extensions: ['.js', '.vue']
 		},
 
+		node: {
+			setImmediate: false,
+			dgram: 'empty',
+			fs: 'empty',
+			net: 'empty',
+			tls: 'empty',
+			child_process: 'empty'
+		},
+
+		devtool: '#cheap-module-eval-source-map',
+
+		devServer: {
+			host: '0.0.0.0',
+			port: port,
+			hot: true,
+			quiet: true,
+			clientLogLevel: 'error',
+			overlay: true,
+			disableHostCheck: true,
+
+			// uncomment the following lines to enable proxy
+			proxy: {
+				'/api': {
+					target: 'https://api.sorocaba.sp.gov.br/pub-consulta/api',
+					changeOrigin: true,
+					pathRewrite: { '^/api': '' },
+					logLevel: 'error'
+				}
+			}
+		},
+
 		plugins: [
 			new webpack.HotModuleReplacementPlugin(),
 			new webpack.NamedModulesPlugin(),
@@ -99,37 +130,6 @@ module.exports = portfinder.getPortPromise().then(port => {
 					messages: [`Your application is running here: http://localhost:${port}`]
 				}
 			})
-		],
-
-		devtool: '#cheap-module-eval-source-map',
-
-		devServer: {
-			host: '0.0.0.0',
-			port: port,
-			hot: true,
-			quiet: true,
-			clientLogLevel: 'error',
-			overlay: true,
-			disableHostCheck: true,
-
-			// uncomment the following lines to enable proxy
-			proxy: {
-				'/api': {
-					target: 'https://api.sorocaba.sp.gov.br/pub-consulta/api',
-					changeOrigin: true,
-					pathRewrite: {'^/api' : ''},
-					logLevel: 'error'
-				}
-			}
-		},
-
-		node: {
-			setImmediate: false,
-			dgram: 'empty',
-			fs: 'empty',
-			net: 'empty',
-			tls: 'empty',
-			child_process: 'empty'
-		}
+		]
 	};
 });

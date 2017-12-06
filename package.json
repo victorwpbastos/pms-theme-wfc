@@ -7,7 +7,7 @@
 		"start": "webpack-dev-server --inline --progress --config build/webpack.config.dev.js",
 		"prebuild": "rimraf dist",
 		"postbuild": "copy config.js dist",
-		"build": "webpack --progress --display=\"none\" --hide-modules --config build/webpack.config.prod.js"
+		"build": "webpack -p --progress --display=\"none\" --hide-modules --config build/webpack.config.prod.js"
 	},
 	"authors": [
 		"Seção de Sistemas <desenvolvimento@sorocaba.sp.gov.br>",
