@@ -10,7 +10,7 @@
 <script>
 	export default {
 		props: {
-			value: { default: '', required() { return Array.isArray(this.modelValue); } },
+			value: { default: '' },
 			modelValue: { default: '' },
 			id: { default() { return `field_${this._uid}`; } },
 			rounded: { default: false }
@@ -34,6 +34,12 @@
 		watch: {
 			rounded() {
 				this.toggleRounded();
+			}
+		},
+
+		created() {
+			if (Array.isArray(this.modelValue) && !this.value) {
+				console.error('[Vue warn]: Missing required prop: "value"');
 			}
 		},
 
