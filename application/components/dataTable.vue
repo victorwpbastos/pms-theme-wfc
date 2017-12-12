@@ -57,8 +57,9 @@
 							v-for="field in fields"
 							:key="field.id"
 							class="text-center"
+							:class="{ 'has-sort-field': userSortFields.has(field.id) }"
 							style="white-space: nowrap;"
-							:style="field.style || ''"
+							:style="field.style"
 							@click="applySort(field.id, $event)"
 						>
 							{{field.name}}
@@ -653,8 +654,11 @@
 
 	.v-datatable-header  {
 		user-select: none;
-		cursor: pointer;
 		background-color: #ddd;
+	}
+
+	.has-sort-field {
+		cursor: pointer;
 	}
 
 	.v-datatable-body {
