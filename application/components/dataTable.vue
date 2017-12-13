@@ -42,97 +42,105 @@
 		<!-- SLOT PARA FILTROS ADICIONAIS -->
 		<slot name="filters"></slot>
 
-		<!-- AVISO DE NENHUM RESULTADO -->
-		<div v-if="!loadingData && isEmpty" class="alert alert-warning">
-			Nenhum registro para exibição.
+		<!-- AVISO DE CARREGANDO DADOS -->
+		<div v-if="loadingData" class="alert alert-warning text-center">
+			<span class="fa fa-spinner fa-spin"></span>
+			<strong v-html="loadingMessage"></strong>
 		</div>
 
-		<!-- TABELA DE DADOS PAGINADOS -->
-		<slot name="table" :fields="fields" :items="itemList">
-			<table v-show="!isEmpty" class="v-datatable-table table table-bordered table-condensed table-hover">
-				<!-- HEADER COM ORDENAÇÃO -->
-				<thead class="v-datatable-header">
-					<tr>
-						<th
-							v-for="field in fields"
-							:key="field.id"
-							class="text-center"
-							:class="{ 'has-sort-field': userSortFields.has(field.id) }"
-							style="white-space: nowrap;"
-							:style="field.style"
-							@click="applySort(field.id, $event)"
-						>
-							{{field.name}}
-							<template v-if="userSortFields.has(field.id)">
-								<i v-show="userSortFields.get(field.id).order=='asc'" class="fa fa-sort-alpha-asc"></i>
-								<i v-show="userSortFields.get(field.id).order=='desc'" class="fa fa-sort-alpha-desc"></i>
-								<sup>{{userSortFields.get(field.id).index}}</sup>
-							</template>
-						</th>
-						<slot name="extraHeaders"></slot>
-					</tr>
-				</thead>
+		<!-- AVISO DE NENHUM RESULTADO -->
+		<div v-else-if="!loadingData && isEmpty" class="alert alert-warning">
+			<strong>Nenhum registro disponível para exibição.</strong>
+		</div>
 
-				<!-- DADOS DA PAGINAÇÃO -->
-				<tbody class="v-datatable-body">
-					<template v-for="item in itemList">
-						<slot name="rows" :item="item">
-							<tr @click="$emit('rowClick', item)">
-								<td v-for="field in fields" class="text-center" :key="field.id">
-									{{ getProperty(item, field.id) }}
-								</td>
-							</tr>
-						</slot>
-					</template>
-				</tbody>
-			</table>
-		</slot>
+		<template v-else>
+			<!-- TABELA DE DADOS PAGINADOS -->
+			<slot name="table" :fields="fields" :items="itemList">
+				<table v-show="!isEmpty" class="v-datatable-table table table-bordered table-condensed table-hover">
+					<!-- HEADER COM ORDENAÇÃO -->
+					<thead class="v-datatable-header">
+						<tr>
+							<th
+								v-for="field in fields"
+								:key="field.id"
+								class="text-center"
+								:class="{ 'has-sort-field': userSortFields.has(field.id) }"
+								style="white-space: nowrap;"
+								:style="field.style"
+								@click="applySort(field.id, $event)"
+							>
+								{{field.name}}
+								<template v-if="userSortFields.has(field.id)">
+									<i v-show="userSortFields.get(field.id).order=='asc'" class="fa fa-sort-alpha-asc"></i>
+									<i v-show="userSortFields.get(field.id).order=='desc'" class="fa fa-sort-alpha-desc"></i>
+									<sup>{{userSortFields.get(field.id).index}}</sup>
+								</template>
+							</th>
+							<slot name="extraHeaders"></slot>
+						</tr>
+					</thead>
 
-		<!-- FOOTER COM CONTROLES DE PAGINAÇÃO -->
-		<div class="v-datatable-footer">
-			<div class="row">
-				<div class="col-sm-12 col-md-3"  style="margin-bottom: 5px;">
-					<select class="form-control input-sm" v-model.number="userItemsPerPage" :disabled="isEmpty">
-						<option value="10">10 por página</option>
-						<option value="20">20 por página</option>
-						<option value="25">25 por página</option>
-						<option value="50">50 por página</option>
-						<option value="100">100 por página</option>
-						<option value="-1">Exibir todos</option>
-					</select>
-				</div>
-				<div class="col-xs-6 col-sm-8 col-md-6">
-					<p class="form-control-static text-center text-muted">
-						<span class="hidden-xs">
-							Página {{currentPage}} de {{pageCount}}
-							/ Registro {{itemOffset}} à {{finalItemOffset}} de {{itemCount}}
-						</span>
-						<span class="visible-xs-inline">
-							Pg. {{currentPage}} de {{pageCount}}
-							({{itemOffset}}-{{finalItemOffset}}/{{itemCount}})
-						</span>
-					</p>
-				</div>
-				<div class="col-xs-6 col-sm-4 col-md-3">
-					<div class="pull-right">
-						<button type="button" class="btn btn-default btn-sm" :disabled="!canGoToPreviousPage" @click="goToFirstPage">
-							<span class="hidden-xs">Primeira</span>
-							<span class="visible-xs-inline"><i class="fa fa-fast-backward"></i></span>
-						</button>
-						<button type="button" class="btn btn-default btn-sm" :disabled="!canGoToPreviousPage" @click="goToPreviousPage">
-							<i class="fa fa-chevron-left"></i>
-						</button>
-						<button type="button" class="btn btn-default btn-sm" :disabled="!canGoToNextPage" @click="goToNextPage">
-							<i class="fa fa-chevron-right"></i>
-						</button>
-						<button type="button" class="btn btn-default btn-sm" :disabled="!canGoToNextPage" @click="goToLastPage">
-							<span class="hidden-xs">Última</span>
-							<span class="visible-xs-inline"><i class="fa fa-fast-forward"></i></span>
-						</button>
+					<!-- DADOS DA PAGINAÇÃO -->
+					<tbody class="v-datatable-body">
+						<template v-for="item in itemList">
+							<slot name="rows" :item="item">
+								<tr @click="$emit('rowClick', item)">
+									<td v-for="field in fields" class="text-center" :key="field.id">
+										{{ getProperty(item, field.id) }}
+									</td>
+								</tr>
+							</slot>
+						</template>
+					</tbody>
+				</table>
+			</slot>
+
+			<!-- FOOTER COM CONTROLES DE PAGINAÇÃO -->
+			<div class="v-datatable-footer">
+				<div class="row">
+					<div class="col-sm-12 col-md-3" style="margin-bottom: 5px;">
+						<select class="form-control input-sm" v-model.number="userItemsPerPage" :disabled="isEmpty">
+							<option value="10">10 por página</option>
+							<option value="20">20 por página</option>
+							<option value="25">25 por página</option>
+							<option value="50">50 por página</option>
+							<option value="100">100 por página</option>
+							<option value="-1">Exibir todos</option>
+						</select>
+					</div>
+					<div class="col-xs-6 col-sm-8 col-md-6">
+						<p class="form-control-static text-center text-muted">
+							<span class="hidden-xs">
+								Página {{currentPage}} de {{pageCount}}
+								/ Registro {{itemOffset}} à {{finalItemOffset}} de {{itemCount}}
+							</span>
+							<span class="visible-xs-inline">
+								Pg. {{currentPage}} de {{pageCount}}
+								({{itemOffset}}-{{finalItemOffset}}/{{itemCount}})
+							</span>
+						</p>
+					</div>
+					<div class="col-xs-6 col-sm-4 col-md-3">
+						<div class="pull-right">
+							<button type="button" class="btn btn-default btn-sm" :disabled="!canGoToPreviousPage" @click="goToFirstPage">
+								<span class="hidden-xs">Primeira</span>
+								<span class="visible-xs-inline"><i class="fa fa-angle-double-left"></i></span>
+							</button>
+							<button type="button" class="btn btn-default btn-sm" :disabled="!canGoToPreviousPage" @click="goToPreviousPage">
+								<i class="fa fa-angle-left"></i>
+							</button>
+							<button type="button" class="btn btn-default btn-sm" :disabled="!canGoToNextPage" @click="goToNextPage">
+								<i class="fa fa-angle-right"></i>
+							</button>
+							<button type="button" class="btn btn-default btn-sm" :disabled="!canGoToNextPage" @click="goToLastPage">
+								<span class="hidden-xs">Última</span>
+								<span class="visible-xs-inline"><i class="fa fa-angle-double-right"></i></span>
+							</button>
+						</div>
 					</div>
 				</div>
 			</div>
-		</div>
+		</template>
 	</div>
 </template>
 
@@ -152,7 +160,7 @@
 
 	export default {
 		props: {
-			/**
+			/*
 				URL que retorna os dados paginados.
 				Os dados devem estar no formato de paginação adequado.
 				Ver https://github.com/tisorocaba-libs/NETCommons/tree/master/Sorocaba.Commons.Entity/Pagination.
@@ -163,7 +171,7 @@
 				default: null
 			},
 
-			/**
+			/*
 				Indica se o componente pode ler e escrever diretamente da URL.
 				A URL será usada para armazenar os parâmetros de paginação.
 			*/
@@ -173,7 +181,7 @@
 				default: true
 			},
 
-			/**
+			/*
 				Caso 'urlAccess' seja falso, os dados serão armazenados nessa propriedade.
 				Deve ser usado com o modificador '.sync' para permitir a 'escrita' pelo componente.
 			*/
@@ -183,7 +191,7 @@
 				default: null
 			},
 
-			/**
+			/*
 				Array com os objetos de configuração dos campos.
 				Usados para exibição, busca e ordenação dos resultados.
 
@@ -202,7 +210,7 @@
 				default: () => []
 			},
 
-			/**
+			/*
 				Objeto usado para filtrar os resultados no padrão 'filter_fields'.
 				Cada vez que a propriedade for alterada, os filtros serão automaticamente aplicados.
 				Cada propriedade do objeto corresponde a um filtro.
@@ -216,13 +224,19 @@
 				type: Object,
 				required: false,
 				default: () => {}
+			},
+
+			/* Mensagem passada para avisar que os dados estão sendo carregados */
+			loadingMessage: {
+				type: String,
+				required: false,
+				default: 'Carregando dados.'
 			}
 		},
 
 		data() {
 			return {
 				/* Campos internos. */
-
 				userSortFields: new Map(), // Campos incluídos na ordenação atual e sua ordem ('asc' ou 'desc').
 				userFullSearchFields: [],  // Campos marcados para serem incluídos na busca.
 				userFullSearchValue: '',   // Valor atual do campo de busca.
@@ -232,7 +246,6 @@
 				lastError: null,          // Armazena o erro da última requisição (se houve erro).
 
 				/* Enviados ao Back-end */
-
 				page: 1,               // Número da página requisitada.
 				items_per_page: 10,    // Quantidade de itens por página requisitado.
 				show_all_items: false, // Indica se todos os itens devem ser retornados, independente dos parâmeros anteriores.
@@ -242,7 +255,6 @@
 				fullsearch_value: '',  // Valor usado para a busca 'fullsearch'.
 
 				/* Recebidos do Back-end */
-
 				pageCount: 0,   // Total de páginas disponíveis (muda de acordo com o 'items_per_page');
 				currentPage: 0, // Página atual retornada.
 				itemCount: 0,   // Total de itens disponíveis.
@@ -252,7 +264,7 @@
 		},
 
 		computed: {
-			/**
+			/*
 				Mapa para facilitar o acesso aos campos utilizando o 'id'.
 				Também cria uma cópia dos objetos para permitir a alteração.
 			*/
@@ -260,12 +272,12 @@
 				return new Map(this.fields.map(s => [s.id, s]));
 			},
 
-			/** Indica se a paginação atual não retornou nenhum resultado. */
+			/* Indica se a paginação atual não retornou nenhum resultado. */
 			isEmpty() {
 				return this.itemCount == 0;
 			},
 
-			/** Índice final da janela de paginação atual. Leva em conta o número de itens efetivos na página. */
+			/* Índice final da janela de paginação atual. Leva em conta o número de itens efetivos na página. */
 			finalItemOffset() {
 				if (this.show_all_items) {
 					return this.itemCount;
@@ -275,21 +287,22 @@
 				}
 			},
 
-			/** Indica se é possível navegar para a página anterior. */
+			/* Indica se é possível navegar para a página anterior. */
 			canGoToPreviousPage() {
 				return this.currentPage > 1;
 			},
 
-			/** Indica se é possível navegar para a próxima página. */
+			/* Indica se é possível navegar para a próxima página. */
 			canGoToNextPage() {
 				return this.currentPage < this.pageCount;
 			},
 
-			/** Número de itens por página efetivo. Leva em consideração o campo 'show_all_items'. */
+			/* Número de itens por página efetivo. Leva em consideração o campo 'show_all_items'. */
 			userItemsPerPage: {
 				get() {
 					return (this.show_all_items) ? -1 : this.items_per_page;
 				},
+
 				set(newValue) {
 					if (newValue == -1) {
 						this.show_all_items = true;
@@ -300,22 +313,22 @@
 				}
 			},
 
-			/** Somente os campos que podem fazer parte da ordenação. */
+			/* Somente os campos que podem fazer parte da ordenação. */
 			sortFields() {
 				return this.fields.filter(f => f.sort == true);
 			},
 
-			/** Somente os campos que podem fazer parte da busca 'fullsearch'. */
+			/* Somente os campos que podem fazer parte da busca 'fullsearch'. */
 			fullSearchFields() {
 				return this.fields.filter(f => f.fullSearch == true);
 			},
 
-			/** Indica se existe pelo menos um campo disponível para a busca 'fullsearch'. */
+			/* Indica se existe pelo menos um campo disponível para a busca 'fullsearch'. */
 			fullSearchFieldsAvailable() {
 				return this.fullSearchFields.length > 0;
 			},
 
-			/** Usando os campos de envio ao back-end, retorna a última busca 'fullsearch' aplicada. */
+			/* Usando os campos de envio ao back-end, retorna a última busca 'fullsearch' aplicada. */
 			currentFullSearch() {
 				if (this.fullsearch_fields && this.fullsearch_value) {
 					return {
@@ -346,11 +359,15 @@
 
 			filter_fields() {
 				this.fetchData();
+			},
+
+			loadingData(value) {
+				this.$emit('loading', value);
 			}
 		},
 
 		methods: {
-			/** Carrega e valida os parâmetros de paginação. */
+			/* Carrega e valida os parâmetros de paginação. */
 			loadParameters() {
 				let params = null;
 
@@ -380,27 +397,30 @@
 
 				if (params.sf && /^\w+:(asc|desc)(,\w+:(asc|desc))*$/.test(params.sf)) {
 					params.sf.split(',').forEach(s => {
-						var sParts = s.split(':');
-						var field = sParts[0];
-						var order = sParts[1];
+						let sParts = s.split(':');
+						let field = sParts[0];
+						let order = sParts[1];
+
 						if (this.fieldsMap.has(field)) {
 							this.applySort(field);
+
 							if (order == 'desc') {
 								this.applySort(field);
 							}
-
 						}
 					});
 				}
 
 				if (params.ff && ffExpressionListReg.test(params.ff)) {
 					let ffObject = this.filterFieldsToObject(params.ff);
+
 					this.filter_fields = this.filterFieldsToString(ffObject);
 					this.$emit('update:filterFields', ffObject);
 				}
 
 				if (params.fsf && /^\w+(,\w+)*$/.test(params.fsf)) {
 					this.userFullSearchFields = [];
+
 					params.fsf.split(',').forEach(f => {
 						if (this.fieldsMap.has(f)) {
 							this.userFullSearchFields.push(f);
@@ -414,11 +434,11 @@
 
 				this.applyFullSearch();
 
-				// Aguarda a execução dos watchers para desativar o estado de carregamento de parâmetros.
+				/* Aguarda a execução dos watchers para desativar o estado de carregamento de parâmetros. */
 				this.$nextTick(() => this.loadingParameters = false);
 			},
 
-			/** Armazena os parâmeros de paginação. */
+			/* Armazena os parâmeros de paginação. */
 			storeParameters() {
 				let parameters = {
 					p: this.page,
@@ -438,7 +458,7 @@
 				}
 			},
 
-			/** Aplica a busca 'fullsearch' com os parâmetros selecionados. */
+			/* Aplica a busca 'fullsearch' com os parâmetros selecionados. */
 			applyFullSearch() {
 				if (this.userFullSearchFields.length > 0 && this.userFullSearchValue) {
 					this.fullsearch_fields = this.userFullSearchFields.join(',');
@@ -451,42 +471,44 @@
 				this.fetchData();
 			},
 
-			/**
+			/*
 				Aplica a ordenação ao campo informado.
 				O parâmetro 'event' é usado para decidir se o campo vai substituir ou incrementar a ordenação atual.
 			*/
 			applySort(field, event) {
-				// Verifica se o campo é ordenável.
+				/* Verifica se o campo é ordenável. */
 				if (!this.fieldsMap.get(field).sort) {
 					return;
 				}
 
 				/* Inverte a ordem do campo se ele já estiver na ordenação ou usa a ordem padrão. */
-				var sort = this.userSortFields.get(field);
+				let sort = this.userSortFields.get(field);
 				let order = 'asc';
+
 				if (sort) {
 					order = (sort.order == 'asc') ? 'desc': 'asc';
 				}
 
-				// Remove o campo da ordenação para adicioná-lo ao fim da mesma ...
+				/* Remove o campo da ordenação para adicioná-lo ao fim da mesma ... */
 				if (!event || event.ctrlKey) {
 					this.userSortFields.delete(field);
 				}
-				// .. ou limpa todos os campos da ordenação: o campo informado será o único.
+				/* .. ou limpa todos os campos da ordenação: o campo informado será o único. */
 				else {
 					this.userSortFields.clear();
 				}
 
-				// Adiciona o campo na ordenção.
+				/* Adiciona o campo na ordenação. */
 				let index = this.userSortFields.size + 1;
+
 				this.userSortFields.set(field, { order, index });
 
-				/* Atribuí o filtro de ordenação do back-end. */
+				/* Atribui o filtro de ordenação do back-end. */
 				this.sort_fields = [...this.userSortFields]
 					.map(s => s[0] + ':' + s[1].order)
 					.join(',');
 
-				// Atualiza os dados.
+				/* Atualiza os dados. */
 				this.fetchData();
 			},
 
@@ -494,12 +516,15 @@
 				if (!n) {
 					n = this.pageCount;
 				}
+
 				if (n < 1) {
 					n = 1;
 				}
+
 				if (n > this.pageCount) {
 					n = this.pageCount;
 				}
+
 				this.page = n;
 			},
 
@@ -519,9 +544,8 @@
 				this.goToPage(null);
 			},
 
-			/** Obtém os dados de paginação através de uma requisição AJAX. */
+			/* Obtém os dados de paginação através de uma requisição AJAX. */
 			async fetchData() {
-
 				/*
 					Várias alterações são feitas durante o carregamento dos parâmetros.
 					Evita requisições nesta etapa.
@@ -553,6 +577,7 @@
 
 				try {
 					this.loadingData = true;
+
 					let data = await $.get(this.url, parameters);
 
 					if (data.itemCount > 0) {
@@ -561,12 +586,13 @@
 						this.itemCount = data.itemCount;
 						this.itemOffset = data.itemOffset;
 						this.itemList = data.itemList;
-						// Em algumas situações o back-end retorna o "itemOffset" com valor "0".
+
+						/* Em algumas situações o back-end retorna o "itemOffset" com valor "0". */
 						if (this.itemOffset == 0) {
 							this.itemOffset = 1;
 						}
 					}
-					// Ajusta os valores do back-end quando não há resultados.
+					/* Ajusta os valores do back-end quando não há resultados. */
 					else {
 						this.pageCount = 0;
 						this.currentPage = 0;
@@ -579,17 +605,19 @@
 				} catch(e) {
 					this.lastError = e;
 				} finally {
-					// Ajusta a página atual solicitada, caso o número total de páginas tenha sido alterado.
+					/* Ajusta a página atual solicitada, caso o número total de páginas tenha sido alterado. */
 					if (this.page > this.pageCount) {
 						this.page = (this.pageCount > 0) ? this.pageCount : 1;
 					}
+
 					this.loadingData = false;
 				}
 			},
 
-			/** Converte uma string 'filter_field' em um objeto correspondente. */
+			/* Converte uma string 'filter_field' em um objeto correspondente. */
 			filterFieldsToObject(filterFieldsString) {
 				let filterFields = {};
+
 				filterFieldsString
 					.split(',')
 					.forEach(ff => {
@@ -601,10 +629,11 @@
 							};
 						}
 					});
+
 				return filterFields;
 			},
 
-			/** Converte um objeto 'filter_field' em uma string correspondente. */
+			/* Converte um objeto 'filter_field' em uma string correspondente. */
 			filterFieldsToString(filterFieldsObject) {
 				if (!filterFieldsObject) {
 					return null;
@@ -623,22 +652,24 @@
 					.join(',');
 			},
 
-			/** Navega por caminhos de propriedade separados por ponto ("."). */
+			/* Navega por caminhos de propriedade separados por ponto ("."). */
 			getProperty(object, property) {
 				let data = object;
+
 				property.split('.').forEach(p => data = data[p]);
+
 				return data;
 			}
 		},
 
 		created() {
-			// Marca todos os campos para serem incluídos na busca 'fullsearch'.
+			/* Marca todos os campos para serem incluídos na busca 'fullsearch'. */
 			this.userFullSearchFields = this.fullSearchFields.map(s => s.id);
 
-			// Carrega os parâmetros de paginação.
+			/* Carrega os parâmetros de paginação. */
 			this.loadParameters();
 
-			// Carrega os dado pela primeira vez.
+			/* Carrega os dado pela primeira vez. */
 			this.$nextTick(() => this.fetchData());
 		}
 	};
