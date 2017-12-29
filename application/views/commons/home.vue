@@ -11,7 +11,7 @@
 
 		<div class="row">
 			<div class="col-md-10">
-				<input type="text" class="form-control" v-model="errorMessage"></input>
+				<input type="text" class="form-control" v-model="errorMessage"/>
 			</div>
 			<div class="col-md-2">
 				<button type="button" class="btn btn-danger btn-block" @click="setErrorMessage">
@@ -33,10 +33,10 @@
 				</select>
 			</div>
 			<div class="col-md-3">
-				<input type="text" class="form-control" v-model="toastTitle"></input>
+				<input type="text" class="form-control" v-model="toastTitle"/>
 			</div>
 			<div class="col-md-3">
-				<input type="text" class="form-control" v-model="toastText"></input>
+				<input type="text" class="form-control" v-model="toastText"/>
 			</div>
 			<div class="col-md-2">
 				<select class="form-control" v-model="toastClass">

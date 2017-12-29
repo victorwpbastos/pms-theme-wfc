@@ -1,5 +1,5 @@
 import BaseModel from 'models/base';
-import { required } from 'vuelidate/lib/validators';
+import { required } from 'helpers/validation';
 
 export default class Permisys extends BaseModel {
 	constructor(recuperandoSenha = false) {
