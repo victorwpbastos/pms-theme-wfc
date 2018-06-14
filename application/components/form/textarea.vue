@@ -22,10 +22,6 @@
 		methods: {
 			emitInput(e) {
 				this.$emit('input', e.target.value);
-
-				if (this.autoResize) {
-					this.resize();
-				}
 			},
 
 			resize() {
@@ -33,6 +29,14 @@
 					this.$el.style.overflow = 'hidden';
 					this.$el.style.height = 'auto';
 					this.$el.style.height = (this.$el.scrollHeight) + 'px';
+				}
+			}
+		},
+
+		watch: {
+			value() {
+				if (this.$el && this.autoResize) {
+					this.resize();
 				}
 			}
 		}
